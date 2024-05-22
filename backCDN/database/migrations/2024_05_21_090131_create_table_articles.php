@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('nom');
             $table->string('numero');
             $table->mediumText('contenu') ;
-            $table->foreignId('section_id')->constrained()->onDelete('cascade')->default('null') ;
-            $table->foreignId('chapitre_id')->constrained()->onDelete('cascade')->default('null') ;
+            $table->foreignId('section_id')->nullable()->constrained()->onDelete('cascade') ;
+            $table->foreignId('chapitre_id')->nullable()->constrained()->onDelete('cascade') ;
             $table->foreignId('titre_id')->constrained()->onDelete('cascade') ;
             $table->softDeletes() ;
             $table->timestamps();
