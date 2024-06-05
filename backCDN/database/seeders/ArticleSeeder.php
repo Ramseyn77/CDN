@@ -20,6 +20,7 @@ class ArticleSeeder extends Seeder
             sont soumises aux conditions et sauvegardes prévues par le droit interne de la République du Bénin, 
             qui doit assurer une protection adéquate des droits de l\'homme et des libertés, en particulier des droits établis conformément aux obligations que celle-ci a souscrites en application du Pacte international relatif aux droits civils et politiques des Nations-Unies et de la Charte africaine des droits de l\'homme et des peuples ou d’autres instruments internationaux applicables concernant
              les droits de l’homme, et qui doit intégrer le principe de la proportionnalité. ',
+            'chapitre_id' => 1 ,
             'titre_id' => 1,
         ]) ;
 
@@ -30,6 +31,7 @@ class ArticleSeeder extends Seeder
              informé individuellement les personnes concernées de leur droit d’accès, de rectification ou d’opposition, de la 
              nature des données transmises et des destinataires de celles-ci, soit malgré l’opposition de la personne concernée
               est puni selon les peines prévues à l’article 454 du présent code ',
+            'chapitre_id' => 1 ,
             'titre_id' => 1,
         ]) ;
 
@@ -41,6 +43,7 @@ class ArticleSeeder extends Seeder
             de rémunération, des relations de nature sexuelle de la part d`\'un mineur
             qui se livre à la prostitution, y compris de façon occasionnelle, est puni de vingt (20)
             ans d\'emprisonnement et cinquante millions (50 000 000) de francs CFA d\'amende lorsque la personne a été mise en contact avec l\’auteur des faits au moyen d\’un ou sur un réseau de communication électronique ou un système informatique ',
+            'chapitre_id' => 1 ,
             'titre_id' => 1,
         ]) ;
 
@@ -50,7 +53,7 @@ class ArticleSeeder extends Seeder
             'contenu' => 'Le viol est puni de vingt (20) ans de réclusion criminelle et de cinquante millions (50 000 000)
              de francs CFA d\'amende lorsque la victime a été mise en contact avec l\'auteur des faits au moyen
              d’un ou sur un réseau de communication électronique ou un système informatique',
-            'titre_id' => 1,
+            'titre_id' => 2,
         ]) ;
 
         Article::factory()->create([
@@ -59,7 +62,7 @@ class ArticleSeeder extends Seeder
             'contenu' => 'Les agressions sexuelles autres que le viol sont punies de dix (10) ans d\'emprisonnement
              et vingt-cinq millions (25 000 000) de francs CFA d\'amende lorsque la victime a été mise en contact avec l\'auteur 
             des faits au moyen d’un ou sur un réseau de communication électronique ou un système informatique. ',
-            'titre_id' => 1,
+            'titre_id' => 3,
         ]) ;
 
         Article::factory()->create([
@@ -71,7 +74,8 @@ class ArticleSeeder extends Seeder
              façon occasionnelle, lorsque cette personne présente une particulière vulnérabilité, apparente ou 
              connue de son auteur,
              due à une maladie, à une infirmité, à une déficience physique ou psychique ou à un état de grossesse.',
-            'titre_id' => 1,
+             'chapitre_id' => 2 ,
+             'titre_id' => 1,
         ]) ;
 
         Article::factory()->create([
@@ -81,6 +85,7 @@ class ArticleSeeder extends Seeder
             d’une amende de cinq cent mille (500 000) francs CFA à dix millions (10 000 000) de FCFA, 
             les atteintes à la propriété intellectuelle 
             commises au moyen d’un ou sur un réseau de communication 	électronique 	ou 	un 	système informatique. ',
+            'chapitre_id' => 2 ,
             'titre_id' => 1,
         ]) ;
 
@@ -89,7 +94,7 @@ class ArticleSeeder extends Seeder
             'nom' => 'Œuvres de l’esprit ' ,
             'contenu' => 'Constitue une atteinte à la propriété intellectuelle, le fait, sans autorisation de l’auteur ou de ses ayants droit de reproduire, représenter ou de mettre à la disposition du public une œuvre de l’esprit protégée par le droit d’auteur 
             ou un droit voisin au moyen d’un ou sur un réseau de communication électronique ou un système informatique. ',
-            'titre_id' => 1,
+            'titre_id' => 2,
         ]) ;
 
         Article::factory()->create([
@@ -98,7 +103,7 @@ class ArticleSeeder extends Seeder
             'contenu' => 'Constitue une atteinte à la propriété intellectuelle, le fait, sans autorisation de l’auteur ou de ses ayants droit de 
             reproduire, de représenter ou de mettre à la disposition du public, un dessin ou un modèle protégé par le droit
             d’auteur ou un droit voisin au moyen d’un ou sur un réseau de communication électronique ou un système informatique ',
-            'titre_id' => 1,
+            'titre_id' => 2,
         ]) ;
 
         Article::factory()->create([
@@ -108,6 +113,7 @@ class ArticleSeeder extends Seeder
             toute connaissance de cause, sans droit, de vendre ou de mettre à disposition du public par
              reproduction ou par représentation, un bien ou un produit protégé par un brevet 
             d’invention au moyen d’un ou sur un réseau de communication électronique ou un système informatique. ',
+            'chapitre_id' => 3 ,
             'titre_id' => 1,
         ]) ;
     }

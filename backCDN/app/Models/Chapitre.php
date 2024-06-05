@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -21,6 +22,8 @@ class Chapitre extends Model
     /**
      * @var array
      */
+    use HasFactory ;
+    
     protected $fillable = ['titre_id', 'nom', 'numero', 'deleted_at', 'created_at', 'updated_at'];
 
     /**
@@ -37,6 +40,11 @@ class Chapitre extends Model
     public function titre()
     {
         return $this->belongsTo('App\Models\Titre');
+    }
+
+    public function livre()
+    {
+        return $this->hasOneThrough(Livre::class, Titre::class);
     }
 
     /**

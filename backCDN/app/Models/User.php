@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -19,6 +20,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class User extends Model
 {
+    use HasFactory ;
     /**
      * @var array
      */
@@ -27,8 +29,12 @@ class User extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function recherches()
+    public function consultations()
     {
         return $this->belongsToMany('App\Models\Article');
+    }
+
+    public function recherches(){
+        return $this->hasMany(Recherche::class) ;
     }
 }

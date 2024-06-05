@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ChapitreController;
+use App\Http\Controllers\TitreController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,4 +18,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('chapitres/{id}/livre', [ChapitreController::class, 'livre']) ;
+Route::get('chapitres/{id}/chapitre', [ChapitreController::class, 'chapitre']) ;
+Route::get('chapitres/{id}/articles', [ChapitreController::class, 'articles']) ;
 

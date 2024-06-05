@@ -28,4 +28,9 @@ class Livre extends Model
     {
         return $this->hasMany('App\Models\Titre');
     }
+
+    public function chapitres()
+    {
+        return $this->hasManyThrough(Chapitre::class, Titre::class);
+    }
 }

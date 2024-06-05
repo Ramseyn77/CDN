@@ -65,7 +65,7 @@ class Article extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function recherches()
+    public function consultation_users()
     {
         return $this->belongsToMany('App\Models\User');
     }
