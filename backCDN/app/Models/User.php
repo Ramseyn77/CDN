@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 /**
  * @property integer $id
@@ -18,9 +21,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $updated_at
  * @property UserArticle[] $userArticles
  */
-class User extends Model
+class User extends Authenticatable
 {
     use HasFactory ;
+    use Notifiable ;
     /**
      * @var array
      */
@@ -31,10 +35,18 @@ class User extends Model
      */
     public function consultations()
     {
-        return $this->belongsToMany('App\Models\Article');
+        return $this->belongsToMany('App\Models\Article', 'user_article');
     }
 
     public function recherches(){
         return $this->hasMany(Recherche::class) ;
+    }
+
+    public function comments(){
+        return $this->hasMany(Comment::class) ;
+    }
+
+    public function events(){
+        return $this->hasMany(Event::class) ;
     }
 }

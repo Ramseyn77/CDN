@@ -18,8 +18,9 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('profession');
-            $table->string('profil');
+            $table->string('profession')->nullable();
+            $table->integer('status')->default(0);
+            $table->string('profil')->nullable(); //a revoir 
             $table->timestamps();
         });
     }

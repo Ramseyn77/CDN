@@ -65,8 +65,16 @@ class Article extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function consultation_users()
+    public function consultors()
     {
-        return $this->belongsToMany('App\Models\User');
+        return $this->belongsToMany('App\Models\User','user_article');
+    }
+
+    public function comments(){
+        return $this->hasMany(Comment::class) ;
+    }
+
+    public function events(){
+        return $this->hasMany(Event::class) ;
     }
 }

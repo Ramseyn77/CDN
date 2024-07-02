@@ -19,27 +19,59 @@ class ArticleController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'numero' => 'required|unique:articles',
+            'nom' => 'required' ,
+            'contenu' => 'required'
+        ]) ;
+
+        try {
+            Article::create($request->all()) ;
+            return response()->json([
+                'message' => 'Article created'
+            ], 200) ;
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Problem with this ressource'
+            ], 500) ;
+        }
+    }
+
+    public function comments($id){
+        $article = Article::findOrFail($id) ;
+        $comments=  $article->comments()->with('user')->get();
+        return response()->json([
+            'comments' => $comments
+        ],200) ;
+    }
+
+    public function events($id) {
+        $article = Article::findOrFail($id) ;
+        $events = $article->events()->with('user')->get() ;
+        return response()->json([
+            'events' => $events
+        ],200) ;
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($article)
     {
-        //
+        $atcl = Article::findOrFail($article) ;
+        if($atcl){
+            return response()->json([
+                'article' => $atcl
+            ],200) ;
+        }else{
+            return response()->json([
+                'message' => 'Article not found'
+            ],500) ;
+        }
     }
 
     /**
