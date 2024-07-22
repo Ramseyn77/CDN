@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    private $code ;
 
     public function login(Request $request)
     {
@@ -18,11 +17,15 @@ class AuthController extends Controller
     
             if (Auth::attempt($credentials)) {
                 $user = Auth::user();
-                $token = 'ConnectToken';
-                return response()->json([
-                    'token' => $token,
-                    'user' => $user
-                ], 200);
+                if ($user->email_verified_at !== null) {
+                    $token = 'ConnectToken';
+                    return response()->json([
+                        'token' => $token,
+                        'user' => $user
+                    ], 200);
+                } else {
+                    return response()->json(['message' => 'Unauthorized'], 401);
+                }               
             }else {
                 return response()->json(['message' => 'Unauthorized'], 401);
             }
@@ -38,14 +41,4 @@ class AuthController extends Controller
        return response()->json(['message' => 'Successfully logged out']);
     }
 
-
-    private function code(){
-        $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        $code = '';
-        $length = strlen($characters);
-        for ($i = 0; $i < 6; $i++) {
-            $code .= $characters[rand(0, $length - 1)];
-        }
-        return $code;
-    }
 }

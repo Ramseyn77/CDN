@@ -19,6 +19,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
  * @property string $profil
  * @property string $created_at
  * @property string $updated_at
+ * @property string $verification_code
  * @property UserArticle[] $userArticles
  */
 class User extends Authenticatable
@@ -28,7 +29,7 @@ class User extends Authenticatable
     /**
      * @var array
      */
-    protected $fillable = ['nom', 'prenom', 'email', 'email_verified_at', 'password', 'profession', 'profil', 'created_at', 'updated_at'];
+    protected $fillable = ['nom', 'prenom', 'email', 'email_verified_at', 'password','verification_code' ,'profession', 'profil', 'created_at', 'updated_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

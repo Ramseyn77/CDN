@@ -5,12 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         //
@@ -31,12 +30,49 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-      //
+        $validator = Validator::make($request->all(), [
+            'nom' => 'required|string',
+            'prenom' => 'required|string',
+            'email' => 'required|string|email|unique:users',
+            'password' => 'string|max:255|min:6',
+            'cpassword' => 'string|max:255|min:6' 
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        if ($request->password === $request->cpassword ) {
+            $user = User::create([
+                'nom' => $request->nom ,
+                'prenom' => $request->prenom ,
+                'email' => $request->email,
+                'password' => Hash::make($request->password) ,
+            ]) ;
+            $code = $this->code() ;
+            $user->verification_code = $code;
+            $user->save();
+        } else {
+            return response()->json(['message' => 'Error'], 500);
+        }
+        
+        return response()->json(['message' => 'Utilisateur mis à jour avec succès', 'code' => $code, 'user' => $user], 200);
     }
 
-    /**
-     * Display the specified resource.
-     */
+   public function emailVerify(Request $request, $id){
+        $request->validate([
+            'code' => 'required|string',
+        ]); 
+        $user = User::findOrFail($id) ;
+        if ($user->verification_code == $request->code) {
+            $user->update([
+                'email_verified_at' => now(),
+            ]) ;
+            return response()->json(['message' => 'Utilisateur mis à jour avec succès'], 200);
+        }else {
+            return response()->json(['message' => 'Error'], 401);
+        }
+   }
+
     public function show($user)
     {
         $usr = User::findOrFail($user) ; 
@@ -50,20 +86,47 @@ class UserController extends Controller
         ],500) ;
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+    private function code(){
+        $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        $code = '';
+        $length = strlen($characters);
+        for ($i = 0; $i < 6; $i++) {
+            $code .= $characters[rand(0, $length - 1)];
+        }
+        return $code;
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $user)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'nom' => 'required|string',
+            'prenom' => 'required|string',
+            'email' => 'required|string|email|unique:users,email,'.$user,
+            'profession' => 'nullable|string|max:255',
+            'profil' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg', 
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+        $user = User::findOrFail($user);
+        $data = $request->only(['nom', 'prenom', 'email', 'profession']);
+        if ($request->hasFile('profil')) {
+            $file = $request->file('profil');
+            $path = $file->store('profiles', 'public');
+            $data['profil'] = $path;
+
+            if ($user->profil) {
+                Storage::disk('public')->delete($user->profil);
+            }
+        }
+
+        $user->update($data);
+
+        return response()->json(['message' => 'Utilisateur mis à jour avec succès', 'user' => $user], 200);
+
     }
 
     /**

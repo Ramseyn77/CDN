@@ -1,20 +1,57 @@
-import React from 'react'
+import React, { useState,useEffect } from 'react'
+import {useNavigate} from 'react-router-dom'
 import LogNavbar from '../components/LogNavbar'
 import InputForm from '../components/InputForm';
 import logo from '../uploads/logo.jpeg';
 import google from '../uploads/google.png';
 import { NavLink } from 'react-router-dom';
 import InputPassword from '../components/InputPassword';
+import axios from 'axios'
 
 const Register = () => {
+  const [user, setUser] = useState({
+    'nom' : '', 
+    'prenom' :'',
+    'email':'', 
+    'password':'', 
+    'cpassword':''
+  })
+  const [errors, setErrors] = useState({})
+  const navigate = useNavigate()
+  useEffect(() => {
+    const accessToken = localStorage.getItem('accessToken');
+    const user = localStorage.getItem('user')
+    if (accessToken && user) {
+      navigate('/');
+      return;
+    }
+
+  },[])
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUser({ ...user, [name]: value });
+  }
 
   const handleRegisterGoogle = async () => {
     alert('registred with google')
   }
 
   const handleRegister = async (e) => {
-    e.prevant.default()
-    alert('registred')
+    e.preventDefault();
+    try {
+      const response = await axios.post('http://localhost:8000/api/users', user)
+      if (response.data.user) {
+        navigate('/emailVerify/'+response.data.user.id)
+        alert(response.data.code)
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 422) {
+        setErrors(error.response.data.errors);
+      } else {
+        console.error(error);
+      }
+    }
   }
 
   return (
@@ -29,16 +66,16 @@ const Register = () => {
             <div className='flex flex-col sm:flex-row justify-between items-center'>
               <div className=' sm:w-[45%] w-full flex flex-col space-y-3 mb-2'>
                 <label for='nom' className='text-black font-semibold text-md'>Nom</label>
-                <input name='nom' placeholder='Entrer vôtre nom' className='w-full outline-none border border-2 border-gray-300 rounded-lg text-gray-300 text-sm focus:text-gray-900 focus:border-blue-300 px-2 py-3' />
+                <input name='nom' placeholder='Entrer vôtre nom' onChange={ (e) => handleChange(e)} className={`w-full outline-none border border-2 border-gray-300 rounded-lg text-gray-300 text-sm focus:text-gray-900 focus:border-blue-300 px-2 py-3 ${errors.nom ? 'border-red-300' : ''}`} value={user.nom} />
               </div>
               <div className=' sm:w-[45%] w-full flex flex-col space-y-3 mb-2'>
                 <label for='prenom' className='text-black font-semibold text-md'>Prénoms</label>
-                <input name='prenom' placeholder='Entrer vos prénoms' className='w-full outline-none border border-2 border-gray-300 rounded-lg text-gray-300 text-sm focus:text-gray-900 focus:border-blue-300 px-2 py-3' />
+                <input name='prenom' placeholder='Entrer vos prénoms' onChange={ (e) => handleChange(e)} className={`w-full outline-none border border-2 border-gray-300 rounded-lg text-gray-300 text-sm focus:text-gray-900 focus:border-blue-300 px-2 py-3 ${errors.prenom ? 'border-red-300' : ''}`} value={user.prenom} />
               </div>
             </div>
-            <InputForm name={'email'} label={'Email'} placeholder='Entrer une adresse email ' />
-            <InputPassword name={'password'} label={'Mot de passe '} placeholder='Entrer le mot de passe ' />
-            <InputPassword name={'cpassword'} label={'Confirmer le mot de passe'} placeholder='Confirmer le mot de passe'/>
+            <InputForm name={'email'} label={'Email'} onChange={ (e) => handleChange(e)} placeholder='Entrer une adresse email ' value={user.email} error={errors.email ? true : false} />
+            <InputPassword name={'password'} onChange={ (e) => handleChange(e)} label={'Mot de passe '} placeholder='Entrer le mot de passe ' value={user.password} error={errors.password ? true : false} />
+            <InputPassword name={'cpassword'} onChange={ (e) => handleChange(e)} label={'Confirmer le mot de passe'} placeholder='Confirmer le mot de passe' value={user.cpassword} error={errors.cpassword ? true : false} />
           </div>
           <div className="flex flex-col w-full">
             <button type="submit" 
