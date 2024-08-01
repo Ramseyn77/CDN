@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\AuthMail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 
@@ -12,7 +14,10 @@ class UserController extends Controller
 {
     public function index()
     {
-        //
+        $users = User::all() ;
+        return response()->json([
+            'users'=> $users
+        ], 200) ;
     }
 
    
@@ -34,8 +39,8 @@ class UserController extends Controller
             'nom' => 'required|string',
             'prenom' => 'required|string',
             'email' => 'required|string|email|unique:users',
-            'password' => 'string|max:255|min:6',
-            'cpassword' => 'string|max:255|min:6' 
+            'password' => 'required|string|max:255|min:6',
+            'cpassword' => 'required|string|max:255|min:6' 
         ]);
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
@@ -51,12 +56,25 @@ class UserController extends Controller
             $code = $this->code() ;
             $user->verification_code = $code;
             $user->save();
+            try {
+            Mail::to($user->email)->send(new AuthMail($user, $code));
+            } catch (\Exception $e) {
+                return response()->json(['message' => 'Failed to send email', 'error' => $e->getMessage()], 500);
+            }
         } else {
             return response()->json(['message' => 'Error'], 500);
         }
         
         return response()->json(['message' => 'Utilisateur mis à jour avec succès', 'code' => $code, 'user' => $user], 200);
     }
+
+    // public function email(){
+    //     $user= User::findOrFail(1);
+    //     $code = '101012' ;
+    //     Mail::to($user->email)->send(new AuthMail($user, $code)) ;
+    //     dd('Successfuy send') ;
+    // }
+
 
    public function emailVerify(Request $request, $id){
         $request->validate([
@@ -127,6 +145,13 @@ class UserController extends Controller
 
         return response()->json(['message' => 'Utilisateur mis à jour avec succès', 'user' => $user], 200);
 
+    }
+
+    public function experts(){
+        $experts = User::where('status', 3)->get() ;
+        return response()->json([
+            'experts' => $experts ,
+        ],200) ;
     }
 
     /**

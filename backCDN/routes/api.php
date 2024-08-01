@@ -32,9 +32,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/login',[AuthController::class,'login']) ;
-Route::post('/logout',[AuthController::class,'logout']) ;
+Route::post('/logout', [AuthController::class, 'logout']);
+
 
 Route::resource('users', UserController::class) ;
+Route::get('experts', [UserController::class, 'experts']) ;
 Route::get('users/{id}/consultations',[UserController::class, 'consultations']) ;
 Route::post('users/emailVerify/{id}',[UserController::class, 'emailVerify']) ;
 

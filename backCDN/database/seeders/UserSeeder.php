@@ -40,5 +40,32 @@ class UserSeeder extends Seeder
             'email_verified_at' => now(),
             'status' => 2
         ]) ;
+
+        User::factory()->create([
+            'nom' => 'ASSOBGA',
+            'prenom' => 'Emery',
+            'email' => 'assogba.ememry@gmail.com',
+            'password' => Hash::make('@ssogbaemery'),
+            'email_verified_at' => now(),
+            'status' => 3
+        ]) ;
+
+        User::factory()->create([
+            'nom' => 'ABGOTON',
+            'prenom' => 'Romaric',
+            'email' => 'romaricagboton@gmail.com',
+            'password' => Hash::make('romaric@gboton'),
+            'email_verified_at' => now(),
+            'status' => 3
+        ]) ;
+
+        User::factory()->create([
+            'nom' => 'BIAHOU',
+            'prenom' => 'Frank-Eric',
+            'email' => 'frankericbiahou@gmail.com',
+            'password' => Hash::make('frankericbi@hou'),
+            'email_verified_at' => now(),
+            'status' => 3
+        ]) ;
     }
 }
