@@ -24,5 +24,5 @@ Route::get('/', function () {
 Route::get('articles/comments/{id}', [ArticleController::class, 'comments']) ;
 // Route::get('/login', [AuthController::class, 'loginPage'])->name('loginPage') ;
 // Route::post('/login', [AuthController::class, 'login'])->name('auth.login') ;
-// Route::get('/email', [UserController::class, 'email']) ;
+//  Route::get('/email', [UserController::class, 'email']) ; ////xynueyqlkzuyhfoy for olamidetade@gmail.com
 

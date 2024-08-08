@@ -69,7 +69,7 @@ class UserController extends Controller
     }
 
     // public function email(){
-    //     $user= User::findOrFail(1);
+    //     $user= User::findOrFail(2);
     //     $code = '101012' ;
     //     Mail::to($user->email)->send(new AuthMail($user, $code)) ;
     //     dd('Successfuy send') ;
@@ -154,11 +154,55 @@ class UserController extends Controller
         ],200) ;
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    
+    public function rememberEmail(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|string|email' 
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+        $user = User::where('email', $request->email)->first() ;
+        if( $user ){
+            $code = $this->code() ;
+            $user->update([
+                'verification_code' => $code,
+            ]) ;
+            try {
+                Mail::to($user->email)->send(new AuthMail($user, $code));
+            } catch (\Exception $e) {
+                return response()->json(['message' => 'Failed to send email', 'error' => $e->getMessage()], 500);
+            }
+        }else {
+            return response()->json(['message' => 'Error'], 401);
+        }
+        
+        return response()->json(['message' => 'Utilisateur reconnu avec succès', 'user' => $user], 200);
+    }
+
+    public function changePassword(Request $request){
+        $validator = Validator::make($request->all(), [
+            'code' => 'required|string' ,
+            'password' => 'required|string|min:6',
+            'cpassword' => 'required|string|min:6'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422) ;
+        }
+        $user = User::where('verification_code', $request->code)->first() ;
+        if ( $user ){
+            if ($request->password === $request->cpassword ) {
+                $user->update([
+                    'password' => Hash::make($request->password) ,
+                ]) ;
+
+                return response()->json(['user' => $user], 200) ;
+            }else{
+                return response()->json(['message' => 'les mots de passe se correspondent pas'], 401) ;
+            }
+        }else {
+            return response()->json(['message' => 'Code incorrect'], 500) ;
+        }
     }
 }
