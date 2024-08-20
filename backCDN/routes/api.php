@@ -42,6 +42,7 @@ Route::get('users/{id}/consultations',[UserController::class, 'consultations']) 
 Route::post('users/emailVerify/{id}',[UserController::class, 'emailVerify']) ;
 Route::post('users/rememberEmail',[UserController::class, 'rememberEmail']) ;
 Route::post('users/changePassword',[UserController::class, 'changePassword']) ;
+Route::post('mail',[UserController::class, 'email']) ;
 
 Route::resource('articles',ArticleController::class);
 Route::get('articles/comments/{id}', [ArticleController::class, 'comments']) ;

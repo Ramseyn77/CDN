@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\AuthMail;
+use App\Mail\AboutMail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -68,12 +69,21 @@ class UserController extends Controller
         return response()->json(['message' => 'Utilisateur mis à jour avec succès', 'code' => $code, 'user' => $user], 200);
     }
 
-    // public function email(){
-    //     $user= User::findOrFail(2);
-    //     $code = '101012' ;
-    //     Mail::to($user->email)->send(new AuthMail($user, $code)) ;
-    //     dd('Successfuy send') ;
-    // }
+    public function email(Request $request){
+        $validator = Validator::make($request->all(), [
+            'mailSender' => 'required|string',
+            'subject' => 'required|string',
+            'content' => 'required|string|email|unique:users', 
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+        try {
+            Mail::to("sufyanemoufoutaou819@gmail.com")->send(new AboutMail($request->content,$request->subject,$request->mailSender )) ;
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error'], 500);
+        }
+    }
 
 
    public function emailVerify(Request $request, $id){
