@@ -39,6 +39,14 @@ class Article extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function questions()
+    {
+        return $this->hasMany('App\Models\Question');
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function chapitre()

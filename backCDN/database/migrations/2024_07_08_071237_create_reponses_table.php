@@ -16,7 +16,6 @@ return new class extends Migration
             $table->mediumText('contenu') ;
             $table->foreignId('question_id')->constrained() ;
             $table->integer('status')->default(0) ;
-            $table->softDeletes() ;
             $table->timestamps();
         });
     }

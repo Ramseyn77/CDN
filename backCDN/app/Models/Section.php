@@ -21,7 +21,9 @@ class Section extends Model
      * @var array
      */
     protected $fillable = ['chapitre_id', 'nom', 'numero', 'deleted_at', 'created_at', 'updated_at'];
-
+    protected $attributes = [
+        'nom' => 'Pas de sections',
+    ];
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

@@ -29,7 +29,7 @@ class User extends Authenticatable
     /**
      * @var array
      */
-    protected $fillable = ['nom', 'prenom', 'email', 'email_verified_at', 'password','verification_code' ,'profession', 'profil', 'created_at', 'updated_at'];
+    protected $fillable = ['name','nom', 'prenom', 'email', 'email_verified_at', 'password','verification_code' ,'profession', 'profil', 'created_at', 'updated_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -49,5 +49,12 @@ class User extends Authenticatable
 
     public function events(){
         return $this->hasMany(Event::class) ;
+    }
+    public function setNomAttribute($value){
+        $this->attributes['nom'] = $value ?? 'Admin';
+    }
+    public function setPrenomAttribute($value)
+    {
+        $this->attributes['prenom'] = $value ?? 'admin';
     }
 }

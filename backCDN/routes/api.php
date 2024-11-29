@@ -14,7 +14,6 @@ use App\Http\Controllers\RechercheController;
 use App\Http\Controllers\ReponseController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\TitreController;
-use App\Http\Controllers\TutorielController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -32,7 +31,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/login',[AuthController::class,'login']) ; // xynu eyql kzuy hfoy
+Route::post('/login',[AuthController::class,'login']) ;
 Route::post('/logout', [AuthController::class, 'logout']);
 
 
@@ -40,9 +39,6 @@ Route::resource('users', UserController::class) ;
 Route::get('experts', [UserController::class, 'experts']) ;
 Route::get('users/{id}/consultations',[UserController::class, 'consultations']) ;
 Route::post('users/emailVerify/{id}',[UserController::class, 'emailVerify']) ;
-Route::post('users/rememberEmail',[UserController::class, 'rememberEmail']) ;
-Route::post('users/changePassword',[UserController::class, 'changePassword']) ;
-Route::post('mail',[UserController::class, 'email']) ;
 
 Route::resource('articles',ArticleController::class);
 Route::get('articles/comments/{id}', [ArticleController::class, 'comments']) ;
@@ -77,5 +73,3 @@ Route::resource('questions',QuestionController::class) ;
 Route::get('questions/{id}/reponses', [QuestionController::class, 'reponses']) ;
 
 Route::resource('reponses', ReponseController::class) ;
-
-Route::resource('tutoriels', TutorielController::class) ;

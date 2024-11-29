@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Mail\AuthMail;
-use App\Mail\AboutMail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -69,21 +68,12 @@ class UserController extends Controller
         return response()->json(['message' => 'Utilisateur mis à jour avec succès', 'code' => $code, 'user' => $user], 200);
     }
 
-    public function email(Request $request){
-        $validator = Validator::make($request->all(), [
-            'mailSender' => 'required|string',
-            'subject' => 'required|string',
-            'content' => 'required|string|email|unique:users', 
-        ]);
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-        try {
-            Mail::to("sufyanemoufoutaou819@gmail.com")->send(new AboutMail($request->content,$request->subject,$request->mailSender )) ;
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Error'], 500);
-        }
-    }
+    // public function email(){
+    //     $user= User::findOrFail(1);
+    //     $code = '101012' ;
+    //     Mail::to($user->email)->send(new AuthMail($user, $code)) ;
+    //     dd('Successfuy send') ;
+    // }
 
 
    public function emailVerify(Request $request, $id){
@@ -164,55 +154,11 @@ class UserController extends Controller
         ],200) ;
     }
 
-    
-    public function rememberEmail(Request $request)
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
     {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|string|email' 
-        ]);
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-        $user = User::where('email', $request->email)->first() ;
-        if( $user ){
-            $code = $this->code() ;
-            $user->update([
-                'verification_code' => $code,
-            ]) ;
-            try {
-                Mail::to($user->email)->send(new AuthMail($user, $code));
-            } catch (\Exception $e) {
-                return response()->json(['message' => 'Failed to send email', 'error' => $e->getMessage()], 500);
-            }
-        }else {
-            return response()->json(['message' => 'Error'], 401);
-        }
-        
-        return response()->json(['message' => 'Utilisateur reconnu avec succès', 'user' => $user], 200);
-    }
-
-    public function changePassword(Request $request){
-        $validator = Validator::make($request->all(), [
-            'code' => 'required|string' ,
-            'password' => 'required|string|min:6',
-            'cpassword' => 'required|string|min:6'
-        ]);
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422) ;
-        }
-        $user = User::where('verification_code', $request->code)->first() ;
-        if ( $user ){
-            if ($request->password === $request->cpassword ) {
-                $user->update([
-                    'password' => Hash::make($request->password) ,
-                ]) ;
-
-                return response()->json(['user' => $user], 200) ;
-            }else{
-                return response()->json(['message' => 'les mots de passe se correspondent pas'], 401) ;
-            }
-        }else {
-            return response()->json(['message' => 'Code incorrect'], 500) ;
-        }
+        //
     }
 }

@@ -25,7 +25,6 @@ class Chapitre extends Model
     use HasFactory ;
     
     protected $fillable = ['titre_id', 'nom', 'numero', 'deleted_at', 'created_at', 'updated_at'];
-
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
