@@ -36,7 +36,7 @@ class User extends Authenticatable
      */
     public function consultations()
     {
-        return $this->belongsToMany('App\Models\Article', 'user_article');
+        return $this->belongsToMany('App\Models\Article', 'user_article') ;
     }
 
     public function recherches(){
